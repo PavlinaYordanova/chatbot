@@ -23,7 +23,7 @@ if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
 llm = ChatOpenAI(model_name="gpt-3.5-turbo",
-                 openai_api_key="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")
+                 openai_api_key="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")
 
 # creating a ConversationBufferWindowMemory object with k=3 and assigns it to the session state variable 'buffer_memory' 
 # ConversationBufferWindowMemory keeps the latest pieces of the conversation in raw form
