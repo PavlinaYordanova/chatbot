@@ -1,17 +1,25 @@
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 import pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 import openai
 import streamlit as st
-openai.api_key = "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"
+from dotenv.main import load_dotenv
+import os
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+load_dotenv()
+openai_key = os.environ['OPENAI_API_KEY']
+pinecone_key = os.environ['PINECONE_API_KEY']
+
+
+openai.api_key = openai_key
+
+# model = SentenceTransformer('all-MiniLM-L6-v2')
 
 embed_model = "text-embedding-ada-002"
 embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
 
 # initialize connection to pinecone vector database
-pinecone.init(api_key='b80f1498-11f9-4130-b9fb-6638d55de83b', environment='us-west1-gcp-free')
+pinecone.init(api_key=pinecone_key, environment='us-west1-gcp-free')
 
 # index_name = "example_index"
 # if(index_name not in pinecone.list_indexes()):

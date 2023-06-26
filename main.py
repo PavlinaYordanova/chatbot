@@ -1,4 +1,6 @@
 from langchain.chat_models import ChatOpenAI
+from dotenv.main import load_dotenv
+import os
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
@@ -7,6 +9,8 @@ from langchain.prompts import (
     ChatPromptTemplate,
     MessagesPlaceholder
 )
+load_dotenv()
+openai_key = os.environ['OPENAI_API_KEY']
 
 import streamlit as st
 from streamlit_chat import message  # a Python package that provides a chatbot interface for Streamlit applications
@@ -22,8 +26,7 @@ if 'responses' not in st.session_state:
 if 'requests' not in st.session_state:
     st.session_state['requests'] = []
 
-llm = ChatOpenAI(model_name="gpt-3.5-turbo",
-                 openai_api_key="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")
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=openai_key)
 
 # creating a ConversationBufferWindowMemory object with k=3 and assigns it to the session state variable 'buffer_memory' 
 # ConversationBufferWindowMemory keeps the latest pieces of the conversation in raw form
