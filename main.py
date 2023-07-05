@@ -1,6 +1,7 @@
 from langchain.chat_models import ChatOpenAI
 from dotenv.main import load_dotenv
 import os
+import streamlit as st
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.prompts import (
@@ -15,6 +16,13 @@ openai_key = os.environ['OPENAI_API_KEY']
 import streamlit as st
 from streamlit_chat import message  # a Python package that provides a chatbot interface for Streamlit applications
 from utils import *
+
+load_dotenv()
+openai_key = os.environ['OPENAI_API_KEY']
+# headers = {
+#     "authorization": st.secrets["OPENAI_API_KEY", "PINECONE_API_KEY"],
+#     "content-type": "application/json"
+# }
 
 st.title("МОНЕТА Chatbot :books:") # giving a cool name for our Chatbot using st.title() function
 st.markdown(" Powered by 🦜 LangChain + 🧠 OpenAI + 🚀 Pinecone + 💬 Streamlit")
@@ -89,6 +97,8 @@ with response_container:
             message(st.session_state['responses'][i], key=str(i), avatar_style='personas')
             if i < len(st.session_state['requests']):
                 message(st.session_state["requests"][i], is_user=True, key=str(i) + '_user')
+                
+
                 
 
   
