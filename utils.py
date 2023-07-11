@@ -29,7 +29,7 @@ index_name = "example-index"
 #     pinecone.create_index(index_name, dimension=1536, metric='cosine')
 
 # connect to index in Pinecone vector database
-index = pinecone.Index(index_name)
+index = pinecone.Index(index_name=index_name)
 
 # view index stats
 # index.describe_index_stats()
