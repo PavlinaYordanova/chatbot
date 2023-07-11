@@ -1,4 +1,4 @@
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 import pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 import openai
@@ -6,6 +6,7 @@ import streamlit as st
 from dotenv.main import load_dotenv
 import os
 from langchain.embeddings import SentenceTransformerEmbeddings
+from langchain.vectorstores import Pinecone
 
 load_dotenv()
 openai_key = os.environ['OPENAI_API_KEY']
@@ -14,33 +15,34 @@ pinecone_key = os.environ['PINECONE_API_KEY']
 
 openai.api_key = openai_key
 
-model = SentenceTransformer('average_word_embeddings_glove.6B.300d')
-embeddings = SentenceTransformerEmbeddings(model_name="average_word_embeddings_glove.6B.300d")
+# model = SentenceTransformer('average_word_embeddings_glove.6B.300d')
+# embeddings = SentenceTransformerEmbeddings(model_name="average_word_embeddings_glove.6B.300d")
 
-# model = "text-embedding-ada-002"
-# embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
+model = "text-embedding-ada-002"
+embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
 
 # initialize connection to pinecone vector database
-pinecone.init(api_key=pinecone_key, environment='asia-southeast1-gcp-free')
+pinecone.init(api_key=pinecone_key, environment='us-west4-gcp-free')
 
-# index_name = "example_index"
+index_name = "example-index"
 # if(index_name not in pinecone.list_indexes()):
 #     pinecone.create_index(index_name, dimension=1536, metric='cosine')
 
 # connect to index in Pinecone vector database
-index = pinecone.Index('innovaindex')
+index = pinecone.Index(index_name)
 
 # view index stats
-index.describe_index_stats()
+# index.describe_index_stats()
 
 def find_match(input):
-    input_em = model.encode(input).tolist()
-    result = index.query(input_em, top_k=2, includeMetadata=True)
-    # res = openai.Embedding.create(input=[input], engine=model)
-    # xq = res['data'][0]['embedding']
-    # result = index.query(xq, top_k=2, include_metadata=True)
+    # input_em = model.encode(input).tolist()
+    # result = index.query(input_em, top_k=2, includeMetadata=True)
+    res = openai.Embedding.create(input=[input], engine=model)
+    xq = res['data'][0]['embedding']
+    result = index.query(xq, top_k=2, include_metadata=True)
 
-    return result['matches'][0]
+    # return result['matches'][0]
+    return result['matches'][0]['metadata']['text']+"\n"+result['matches'][1]['metadata']['text']
 
 
 def query_refiner(conversation, query):
